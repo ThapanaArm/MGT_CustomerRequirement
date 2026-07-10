@@ -52,7 +52,7 @@ button {
 
 .workspace {
   display: block;
-  min-height: calc(100vh - 90px);
+  min-height: calc(100vh - 50px);
   padding: 0;
   overflow: hidden;
 }
@@ -262,29 +262,15 @@ button {
 }
 
 .app-statusbar {
-  display: grid;
-  grid-template-rows: 40px 20px;
+  display: block;
+  min-height: 20px;
   border-top: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.92);
 }
 
-.app-statusbar nav {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 0 20px;
-  color: var(--muted);
-  font-size: 24px;
-  font-weight: 300;
-}
-
-.app-statusbar nav span.active {
-  color: var(--accent);
-}
-
 .app-statusbar strong {
+  display: block;
   padding: 2px 6px;
-  border-top: 1px solid var(--line);
   background: #ffffff;
   color: var(--navy);
   font-size: 12px;
@@ -743,7 +729,7 @@ button {
 .sap-grid-head,
 .sap-grid-row {
   display: grid;
-  grid-template-columns: 72px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .sap-grid-head {
@@ -758,21 +744,13 @@ button {
   border-bottom: 1px solid var(--line);
 }
 
-.sap-grid-head span,
-.sap-grid-row span {
+.sap-grid-head span {
   padding: 5px 8px;
-  border-right: 1px solid var(--line);
 }
 
 .sap-grid-row {
   min-height: 27px;
   border-bottom: 1px solid var(--line);
-}
-
-.sap-grid-row span {
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 800;
 }
 
 .sap-grid-row p {
@@ -1204,11 +1182,6 @@ tbody tr.is-selected td:first-child {
     max-height: none;
   }
 
-  .app-statusbar nav {
-    gap: 12px;
-    font-size: 18px;
-    overflow: auto;
-  }
 }
 
 @media print {

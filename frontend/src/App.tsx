@@ -2,7 +2,6 @@ import {
   Edit3,
   List,
   Monitor,
-  MoreHorizontal,
   Plus,
   Power,
   Printer,
@@ -305,13 +304,6 @@ export default function App() {
       </section>
 
       <footer className="app-statusbar">
-        <nav aria-label="Modules">
-          <span className="active">Customer Requirement</span>
-          <span>Customers</span>
-          <span>Products</span>
-          <span>Sales</span>
-          <MoreHorizontal size={22} aria-hidden="true" />
-        </nav>
         <strong>RECORDS: {total}</strong>
       </footer>
 
@@ -441,13 +433,11 @@ function DisplayRequirementView({
         </div>
         <div className="sap-grid">
           <div className="sap-grid-head">
-            <span>Line</span>
             <span>Text</span>
           </div>
           {lines.length > 0 ? (
             lines.map((line, index) => (
               <div className="sap-grid-row" key={`${line}-${index}`}>
-                <span>{index + 1}</span>
                 <p>{line}</p>
               </div>
             ))
