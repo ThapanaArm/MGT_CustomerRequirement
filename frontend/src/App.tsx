@@ -10,7 +10,7 @@ import {
   Trash2,
   X
 } from "lucide-react";
-import { FormEvent, useCallback, useEffect, useState, useTransition } from "react";
+import { FormEvent, useCallback, useEffect, useRef, useState, useTransition } from "react";
 import {
   createCustomerRequirement,
   deleteCustomerRequirement,
@@ -101,8 +101,8 @@ export default function App() {
   const lines = requirementLines(currentDisplay);
 
   useEffect(() => {
-    setSelectedPrintLines(new Set());
-  }, [currentDisplay?.customerCode_ECC6]);
+    setSelectedPrintLines(new Set(Array.from({ length: lines.length }, (_, index) => index)));
+  }, [currentDisplay?.customerCode_ECC6, currentDisplay?.customerRequirement, lines.length]);
 
   const openCreate = () => {
     setSelected(null);
@@ -133,6 +133,10 @@ export default function App() {
       }
       return next;
     });
+  };
+
+  const toggleAllPrintLines = (checked: boolean) => {
+    setSelectedPrintLines(checked ? new Set(Array.from({ length: lines.length }, (_, index) => index)) : new Set());
   };
 
   const closeModal = () => {
@@ -273,6 +277,7 @@ export default function App() {
             rows={rows}
             selectedCode={currentDisplay?.customerCode_ECC6 ?? null}
             selectedPrintLines={selectedPrintLines}
+            onToggleAllPrintLines={toggleAllPrintLines}
             onTogglePrintLine={togglePrintLine}
           />
         </section>
@@ -307,6 +312,7 @@ function DisplayRequirementView({
   onDisplay,
   onManage,
   onPrint,
+  onToggleAllPrintLines,
   onTogglePrintLine,
   rows,
   selectedCode,
@@ -320,12 +326,20 @@ function DisplayRequirementView({
   onDisplay: (row: CustomerRequirement) => void;
   onManage: (row: CustomerRequirement) => void;
   onPrint: (row?: CustomerRequirement | null) => void;
+  onToggleAllPrintLines: (checked: boolean) => void;
   onTogglePrintLine: (lineIndex: number) => void;
   rows: CustomerRequirement[];
   selectedCode: string | null;
   selectedPrintLines: Set<number>;
 }) {
-  const hasPrintSelection = selectedPrintLines.size > 0;
+  const allPrintLinesSelected = lines.length > 0 && selectedPrintLines.size === lines.length;
+  const selectAllRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (selectAllRef.current) {
+      selectAllRef.current.indeterminate = selectedPrintLines.size > 0 && !allPrintLinesSelected;
+    }
+  }, [allPrintLinesSelected, selectedPrintLines.size]);
 
   return (
     <section className="display-layout">
@@ -409,13 +423,21 @@ function DisplayRequirementView({
         </div>
         <div className="sap-grid">
           <div className="sap-grid-head">
-            <span className="print-check-header" aria-hidden="true" />
+            <label className="line-print-check header-select-check" aria-label={allPrintLinesSelected ? "Clear all print lines" : "Select all print lines"}>
+              <input
+                ref={selectAllRef}
+                type="checkbox"
+                checked={allPrintLinesSelected}
+                disabled={lines.length === 0}
+                onChange={(event) => onToggleAllPrintLines(event.target.checked)}
+              />
+            </label>
             <span>Text</span>
           </div>
           {lines.length > 0 ? (
             lines.map((line, index) => (
               <div
-                className={hasPrintSelection && !selectedPrintLines.has(index) ? "sap-grid-row print-excluded" : "sap-grid-row"}
+                className={selectedPrintLines.has(index) ? "sap-grid-row" : "sap-grid-row print-excluded"}
                 key={`${line}-${index}`}
               >
                 <label className="line-print-check" aria-label={`Print line ${index + 1}`}>

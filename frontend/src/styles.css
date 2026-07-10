@@ -697,10 +697,6 @@ button {
   padding: 5px 8px;
 }
 
-.print-check-header {
-  border-right: 1px solid var(--line);
-}
-
 .sap-grid-row {
   min-height: 27px;
   border-bottom: 1px solid var(--line);
@@ -719,6 +715,21 @@ button {
   height: 15px;
   margin: 0;
   accent-color: var(--accent);
+}
+
+.header-select-check {
+  min-height: 34px;
+  background: var(--surface-muted);
+}
+
+.line-print-check input:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.sap-grid-row.print-excluded p {
+  color: var(--muted);
+  opacity: 0.68;
 }
 
 .sap-grid-row p {
@@ -1210,7 +1221,6 @@ tbody tr.is-selected td:first-child {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .print-check-header,
   .line-print-check,
   .sap-grid-row.print-excluded {
     display: none !important;
