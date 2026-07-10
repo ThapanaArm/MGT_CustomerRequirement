@@ -1,14 +1,29 @@
 import {
+  ClipboardCheck,
+  FileText,
+  Filter,
+  HelpCircle,
+  IdCard,
+  Info,
+  LayoutList,
   Edit3,
   List,
+  Mail,
+  MapPin,
   Monitor,
+  MoreHorizontal,
+  Package,
+  PlayCircle,
   Plus,
   Power,
   Printer,
   RefreshCw,
   Save,
   Search,
+  ShoppingCart,
   Trash2,
+  UserPlus,
+  Users,
   X
 } from "lucide-react";
 import { FormEvent, useCallback, useEffect, useMemo, useState, useTransition } from "react";
@@ -196,96 +211,232 @@ export default function App() {
 
   return (
     <main className="app-shell">
-      <section className="workspace" id="requirements">
-        <header className="top-bar">
-          <div>
-            <h1>MGT : Customer Requirement</h1>
-            <p>{title}</p>
-            <small>{subtitle}</small>
-          </div>
-          <div className="top-actions">
-            <button className="secondary-button" type="button" onClick={() => printDocument(currentDisplay)} disabled={!currentDisplay}>
-              <Printer size={18} aria-hidden="true" />
-              <span>Print</span>
-            </button>
-            <button className="primary-button" type="button" onClick={openCreate}>
-              <Plus size={18} aria-hidden="true" />
+      <header className="window-titlebar">
+        <div className="quick-access" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
+        <strong>MGT : Customer Requirement</strong>
+        <div className="window-controls" aria-hidden="true">
+          <span>_</span>
+          <span>□</span>
+          <span>×</span>
+        </div>
+      </header>
+
+      <section className="ribbon-shell" aria-label="Application commands">
+        <div className="ribbon-tabs">
+          <button type="button">HOME</button>
+          <button className="active" type="button">VIEW</button>
+        </div>
+
+        <div className="ribbon-toolbar">
+          <div className="ribbon-group">
+            <button className="ribbon-button" type="button" onClick={openCreate}>
+              <UserPlus size={24} aria-hidden="true" />
               <span>Add Requirement</span>
             </button>
-          </div>
-        </header>
-
-        <section className="command-row" aria-label="Customer requirement tools">
-          <label className="search-box">
-            <Search size={18} aria-hidden="true" />
-            <input
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search code, customer name, or requirement"
-            />
-          </label>
-
-          <div className="segmented" aria-label="Status filter">
-            {(["all", "active", "inactive"] as StatusFilter[]).map((option) => (
-              <button
-                className={status === option ? "selected" : ""}
-                key={option}
-                type="button"
-                onClick={() => setStatus(option)}
-              >
-                {option === "all" ? "All" : option === "active" ? "Active" : "Inactive"}
-              </button>
-            ))}
+            <button className="ribbon-button" type="button">
+              <Users size={24} aria-hidden="true" />
+              <span>Customer Group</span>
+            </button>
+            <button className="ribbon-button" type="button">
+              <Package size={24} aria-hidden="true" />
+              <span>New Items</span>
+            </button>
+            <small>New</small>
           </div>
 
-          <button className="icon-button" type="button" onClick={loadRows} aria-label="Refresh">
-            <RefreshCw size={18} aria-hidden="true" />
-          </button>
-        </section>
+          <div className="ribbon-group">
+            <button className="ribbon-button danger" type="button" onClick={() => currentDisplay ? removeRow(currentDisplay) : undefined} disabled={!currentDisplay}>
+              <Trash2 size={24} aria-hidden="true" />
+              <span>Delete</span>
+            </button>
+            <button className="ribbon-button" type="button" onClick={() => currentDisplay ? openManage(currentDisplay) : undefined} disabled={!currentDisplay}>
+              <Edit3 size={24} aria-hidden="true" />
+              <span>Edit</span>
+            </button>
+            <button className="ribbon-button" type="button" onClick={() => printDocument(currentDisplay)} disabled={!currentDisplay}>
+              <Printer size={24} aria-hidden="true" />
+              <span>Print</span>
+            </button>
+            <small>Actions</small>
+          </div>
 
-        <section className="summary-strip" aria-label="Summary">
-          <div>
-            <span>Total</span>
-            <strong>{total}</strong>
+          <div className="ribbon-group quick-letter">
+            <button type="button"><Mail size={15} aria-hidden="true" />Thank You Note</button>
+            <button type="button"><ClipboardCheck size={15} aria-hidden="true" />Service Excellence</button>
+            <button type="button"><FileText size={15} aria-hidden="true" />Welcome To MGT</button>
+            <small>Quick Letter</small>
           </div>
-          <div>
-            <span>Active in view</span>
-            <strong>{activeCount}</strong>
-          </div>
-          <div>
-            <span>Inactive in view</span>
-            <strong>{inactiveCount}</strong>
-          </div>
-          <div>
-            <span>API status</span>
-            <strong className={error ? "status-text danger" : "status-text ok"}>
-              {error ? "Needs attention" : isLoading ? "Connecting" : "Ready"}
-            </strong>
-          </div>
-        </section>
 
-        {notice ? <div className="notice success">{notice}</div> : null}
-        {error ? (
-          <div className="notice error">
-            <strong>API request failed.</strong>
-            <span>{error}</span>
+          <div className="ribbon-group">
+            <button className="ribbon-button selected" type="button">
+              <LayoutList size={24} aria-hidden="true" />
+              <span>List</span>
+            </button>
+            <button className="ribbon-button" type="button">
+              <IdCard size={24} aria-hidden="true" />
+              <span>Card</span>
+            </button>
+            <button className="ribbon-button" type="button">
+              <MapPin size={24} aria-hidden="true" />
+              <span>Map It</span>
+            </button>
+            <small>View</small>
           </div>
-        ) : null}
 
-        <DisplayRequirementView
-          currentDisplay={currentDisplay}
-          formatDate={formatDate}
-          isLoading={isLoading}
-          lines={lines}
-          onDelete={removeRow}
-          onDisplay={openDisplay}
-          onManage={openManage}
-          onPrint={printDocument}
-          onToggleActive={toggleActive}
-          rows={rows}
-          selectedCode={currentDisplay?.customerCode_ECC6 ?? null}
-        />
+          <div className="ribbon-group">
+            <button className="ribbon-button" type="button">
+              <Filter size={24} aria-hidden="true" />
+              <span>Filter</span>
+            </button>
+            <button className="ribbon-button" type="button">
+              <PlayCircle size={24} aria-hidden="true" />
+              <span>Getting Started</span>
+            </button>
+            <button className="ribbon-button" type="button">
+              <HelpCircle size={24} aria-hidden="true" />
+              <span>Support</span>
+            </button>
+            <button className="ribbon-button" type="button">
+              <ShoppingCart size={24} aria-hidden="true" />
+              <span>Buy Now</span>
+            </button>
+            <button className="ribbon-button" type="button">
+              <Info size={24} aria-hidden="true" />
+              <span>About</span>
+            </button>
+            <small>DevExpress</small>
+          </div>
+        </div>
       </section>
+
+      <section className="workspace" id="requirements">
+        <aside className="filter-pane" aria-label="Customer filters">
+          <div className="filter-title">Customer Requirements</div>
+          <div className="filter-section">
+            <strong>Favorites</strong>
+            <button className={status === "all" ? "active" : ""} type="button" onClick={() => setStatus("all")}>
+              All ({total})
+            </button>
+            <button className={status === "active" ? "active" : ""} type="button" onClick={() => setStatus("active")}>
+              Active ({activeCount})
+            </button>
+            <button className={status === "inactive" ? "active" : ""} type="button" onClick={() => setStatus("inactive")}>
+              Inactive ({inactiveCount})
+            </button>
+          </div>
+          <div className="filter-section">
+            <strong>Custom Filters</strong>
+            <span>On update ({rows.filter((row) => row.updatedAt).length})</span>
+            <span>Groups</span>
+          </div>
+        </aside>
+
+        <section className="content-area">
+          <header className="top-bar">
+            <div>
+              <h1>MGT : Customer Requirement</h1>
+              <p>{title}</p>
+              <small>{subtitle}</small>
+            </div>
+            <div className="top-actions">
+              <button className="secondary-button" type="button" onClick={() => printDocument(currentDisplay)} disabled={!currentDisplay}>
+                <Printer size={18} aria-hidden="true" />
+                <span>Print</span>
+              </button>
+              <button className="primary-button" type="button" onClick={openCreate}>
+                <Plus size={18} aria-hidden="true" />
+                <span>Add Requirement</span>
+              </button>
+            </div>
+          </header>
+
+          <section className="command-row" aria-label="Customer requirement tools">
+            <label className="search-box">
+              <Search size={18} aria-hidden="true" />
+              <input
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Search Customer Requirement (Ctrl + F)"
+              />
+            </label>
+
+            <div className="segmented" aria-label="Status filter">
+              {(["all", "active", "inactive"] as StatusFilter[]).map((option) => (
+                <button
+                  className={status === option ? "selected" : ""}
+                  key={option}
+                  type="button"
+                  onClick={() => setStatus(option)}
+                >
+                  {option === "all" ? "All" : option === "active" ? "Active" : "Inactive"}
+                </button>
+              ))}
+            </div>
+
+            <button className="icon-button" type="button" onClick={loadRows} aria-label="Refresh">
+              <RefreshCw size={18} aria-hidden="true" />
+            </button>
+          </section>
+
+          <section className="summary-strip" aria-label="Summary">
+            <div>
+              <span>Total</span>
+              <strong>{total}</strong>
+            </div>
+            <div>
+              <span>Active in view</span>
+              <strong>{activeCount}</strong>
+            </div>
+            <div>
+              <span>Inactive in view</span>
+              <strong>{inactiveCount}</strong>
+            </div>
+            <div>
+              <span>API status</span>
+              <strong className={error ? "status-text danger" : "status-text ok"}>
+                {error ? "Needs attention" : isLoading ? "Connecting" : "Ready"}
+              </strong>
+            </div>
+          </section>
+
+          {notice ? <div className="notice success">{notice}</div> : null}
+          {error ? (
+            <div className="notice error">
+              <strong>API request failed.</strong>
+              <span>{error}</span>
+            </div>
+          ) : null}
+
+          <DisplayRequirementView
+            currentDisplay={currentDisplay}
+            formatDate={formatDate}
+            isLoading={isLoading}
+            lines={lines}
+            onDelete={removeRow}
+            onDisplay={openDisplay}
+            onManage={openManage}
+            onPrint={printDocument}
+            onToggleActive={toggleActive}
+            rows={rows}
+            selectedCode={currentDisplay?.customerCode_ECC6 ?? null}
+          />
+        </section>
+      </section>
+
+      <footer className="app-statusbar">
+        <nav aria-label="Modules">
+          <span className="active">Customer Requirement</span>
+          <span>Customers</span>
+          <span>Products</span>
+          <span>Sales</span>
+          <MoreHorizontal size={22} aria-hidden="true" />
+        </nav>
+        <strong>RECORDS: {total}</strong>
+      </footer>
 
       {modalMode ? (
         <ManagePopup
