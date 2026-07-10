@@ -3,7 +3,6 @@ import {
   List,
   Monitor,
   Plus,
-  Power,
   Printer,
   RefreshCw,
   Save,
@@ -11,12 +10,11 @@ import {
   Trash2,
   X
 } from "lucide-react";
-import { FormEvent, useCallback, useEffect, useMemo, useState, useTransition } from "react";
+import { FormEvent, useCallback, useEffect, useState, useTransition } from "react";
 import {
   createCustomerRequirement,
   deleteCustomerRequirement,
   listCustomerRequirements,
-  setCustomerRequirementActive,
   updateCustomerRequirement
 } from "./api";
 import type { CustomerRequirement, CustomerRequirementForm, StatusFilter } from "./types";
@@ -98,8 +96,6 @@ export default function App() {
     return () => window.clearTimeout(timer);
   }, [loadRows]);
 
-  const activeCount = useMemo(() => rows.filter((row) => row.isActive).length, [rows]);
-  const inactiveCount = rows.length - activeCount;
   const currentDisplay = rows.find((row) => row.customerCode_ECC6 === displaySelection) ?? rows[0] ?? null;
   const lines = requirementLines(currentDisplay);
 
@@ -151,19 +147,6 @@ export default function App() {
     });
   };
 
-  const toggleActive = (row: CustomerRequirement) => {
-    startTransition(() => {
-      setCustomerRequirementActive(row.customerCode_ECC6, !row.isActive)
-        .then(() => {
-          setNotice(row.isActive ? "Customer requirement marked inactive." : "Customer requirement reactivated.");
-          loadRows();
-        })
-        .catch((requestError: Error) => {
-          setError(requestError.message);
-        });
-    });
-  };
-
   const removeRow = (row: CustomerRequirement) => {
     const confirmed = window.confirm(`Delete requirement for ${row.customerCode_ECC6.trim()}?`);
     if (!confirmed) return;
@@ -191,9 +174,6 @@ export default function App() {
     }, 80);
   };
 
-  const title = "Display Customer Requirement";
-  const subtitle = "Display, manage, inactive, delete, and print customer requirement records from one screen.";
-
   return (
     <main className="app-shell">
       <header className="window-titlebar">
@@ -215,8 +195,6 @@ export default function App() {
           <header className="top-bar">
             <div>
               <h1>MGT : Customer Requirement</h1>
-              <p>{title}</p>
-              <small>{subtitle}</small>
             </div>
             <div className="top-actions">
               <button className="secondary-button" type="button" onClick={() => printDocument(currentDisplay)} disabled={!currentDisplay}>
@@ -258,27 +236,6 @@ export default function App() {
             </button>
           </section>
 
-          <section className="summary-strip" aria-label="Summary">
-            <div>
-              <span>Total</span>
-              <strong>{total}</strong>
-            </div>
-            <div>
-              <span>Active in view</span>
-              <strong>{activeCount}</strong>
-            </div>
-            <div>
-              <span>Inactive in view</span>
-              <strong>{inactiveCount}</strong>
-            </div>
-            <div>
-              <span>API status</span>
-              <strong className={error ? "status-text danger" : "status-text ok"}>
-                {error ? "Needs attention" : isLoading ? "Connecting" : "Ready"}
-              </strong>
-            </div>
-          </section>
-
           {notice ? <div className="notice success">{notice}</div> : null}
           {error ? (
             <div className="notice error">
@@ -296,7 +253,6 @@ export default function App() {
             onDisplay={openDisplay}
             onManage={openManage}
             onPrint={printDocument}
-            onToggleActive={toggleActive}
             rows={rows}
             selectedCode={currentDisplay?.customerCode_ECC6 ?? null}
           />
@@ -332,7 +288,6 @@ function DisplayRequirementView({
   onDisplay,
   onManage,
   onPrint,
-  onToggleActive,
   rows,
   selectedCode
 }: {
@@ -344,7 +299,6 @@ function DisplayRequirementView({
   onDisplay: (row: CustomerRequirement) => void;
   onManage: (row: CustomerRequirement) => void;
   onPrint: (row?: CustomerRequirement | null) => void;
-  onToggleActive: (row: CustomerRequirement) => void;
   rows: CustomerRequirement[];
   selectedCode: string | null;
 }) {
@@ -404,9 +358,6 @@ function DisplayRequirementView({
             </button>
             <button className="icon-button" type="button" onClick={() => onPrint(currentDisplay)} aria-label="Print requirement" disabled={!currentDisplay}>
               <Printer size={16} aria-hidden="true" />
-            </button>
-            <button className="icon-button" type="button" onClick={() => currentDisplay ? onToggleActive(currentDisplay) : undefined} aria-label={currentDisplay?.isActive ? "Inactive" : "Active"} disabled={!currentDisplay}>
-              <Power size={16} aria-hidden="true" />
             </button>
             <button className="icon-button danger" type="button" onClick={() => currentDisplay ? onDelete(currentDisplay) : undefined} aria-label="Delete" disabled={!currentDisplay}>
               <Trash2 size={16} aria-hidden="true" />

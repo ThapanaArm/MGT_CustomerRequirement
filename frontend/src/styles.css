@@ -279,7 +279,6 @@ button {
 
 .top-bar,
 .command-row,
-.summary-strip,
 .table-panel,
 .detail-drawer {
   border: 1px solid var(--line);
@@ -308,22 +307,6 @@ button {
   line-height: 1.2;
   letter-spacing: 0;
   color: var(--navy);
-}
-
-.top-bar p {
-  margin: 4px 0 0;
-  color: var(--navy);
-  font-size: 14px;
-  font-weight: 800;
-}
-
-.top-bar small {
-  display: block;
-  margin-top: 3px;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.4;
-  overflow-wrap: anywhere;
 }
 
 .top-actions {
@@ -459,25 +442,6 @@ button {
   box-shadow: inset 0 -2px 0 var(--accent);
 }
 
-.summary-strip {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  border: 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.summary-strip div {
-  min-height: 46px;
-  padding: 7px 12px;
-  border-right: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.86);
-}
-
-.summary-strip div:last-child {
-  border-right: 0;
-}
-
-.summary-strip span,
 .table-header p,
 .drawer-header span,
 .meta-grid span,
@@ -486,21 +450,6 @@ button {
   color: var(--muted);
   font-size: 12px;
   font-weight: 750;
-}
-
-.summary-strip strong {
-  display: block;
-  margin-top: 5px;
-  font-size: 18px;
-  line-height: 1.15;
-}
-
-.status-text.ok {
-  color: var(--success);
-}
-
-.status-text.danger {
-  color: var(--danger);
 }
 
 .notice {
@@ -1111,18 +1060,9 @@ tbody tr.is-selected td:first-child {
     max-width: calc(100vw - 24px);
   }
 
-  .top-bar small {
-    width: min(320px, calc(100vw - 24px));
-    max-width: min(320px, calc(100vw - 24px));
-  }
-
   .top-actions {
     display: grid;
     grid-template-columns: 1fr;
-  }
-
-  .summary-strip {
-    grid-template-columns: 1fr 1fr;
   }
 
   .display-layout {
@@ -1199,7 +1139,6 @@ tbody tr.is-selected td:first-child {
   .filter-pane,
   .app-statusbar,
   .command-row,
-  .summary-strip,
   .notice,
   .table-panel,
   .modal-backdrop {
