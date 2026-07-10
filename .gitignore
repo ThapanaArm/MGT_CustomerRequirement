@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build output
+bin/
+obj/
+dist/
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+
+# Local configuration
+.env
+.env.*
+!*.env.example
+appsettings.Local.json
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Local QA artifacts
+frontend-qa-desktop.png
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+.vs/
+.vscode/
