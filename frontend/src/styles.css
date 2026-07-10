@@ -678,7 +678,7 @@ button {
 .sap-grid-head,
 .sap-grid-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: 32px minmax(0, 1fr);
 }
 
 .sap-grid-head {
@@ -697,9 +697,28 @@ button {
   padding: 5px 8px;
 }
 
+.print-check-header {
+  border-right: 1px solid var(--line);
+}
+
 .sap-grid-row {
   min-height: 27px;
   border-bottom: 1px solid var(--line);
+}
+
+.line-print-check {
+  display: grid;
+  place-items: center;
+  min-height: 27px;
+  border-right: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.line-print-check input {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: var(--accent);
 }
 
 .sap-grid-row p {
@@ -1188,9 +1207,17 @@ tbody tr.is-selected td:first-child {
 
   .sap-grid-head {
     position: static;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .print-check-header,
+  .line-print-check,
+  .sap-grid-row.print-excluded {
+    display: none !important;
   }
 
   .sap-grid-row {
+    grid-template-columns: minmax(0, 1fr);
     break-inside: avoid;
   }
 }

@@ -72,6 +72,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [selectedPrintLines, setSelectedPrintLines] = useState<Set<number>>(() => new Set());
   const [isPending, startTransition] = useTransition();
 
   const loadRows = useCallback(() => {
@@ -99,6 +100,10 @@ export default function App() {
   const currentDisplay = rows.find((row) => row.customerCode_ECC6 === displaySelection) ?? rows[0] ?? null;
   const lines = requirementLines(currentDisplay);
 
+  useEffect(() => {
+    setSelectedPrintLines(new Set());
+  }, [currentDisplay?.customerCode_ECC6]);
+
   const openCreate = () => {
     setSelected(null);
     setModalMode("create");
@@ -116,6 +121,18 @@ export default function App() {
 
   const openDisplay = (row: CustomerRequirement) => {
     setDisplaySelection(row.customerCode_ECC6);
+  };
+
+  const togglePrintLine = (lineIndex: number) => {
+    setSelectedPrintLines((current) => {
+      const next = new Set(current);
+      if (next.has(lineIndex)) {
+        next.delete(lineIndex);
+      } else {
+        next.add(lineIndex);
+      }
+      return next;
+    });
   };
 
   const closeModal = () => {
@@ -255,6 +272,8 @@ export default function App() {
             onPrint={printDocument}
             rows={rows}
             selectedCode={currentDisplay?.customerCode_ECC6 ?? null}
+            selectedPrintLines={selectedPrintLines}
+            onTogglePrintLine={togglePrintLine}
           />
         </section>
       </section>
@@ -288,8 +307,10 @@ function DisplayRequirementView({
   onDisplay,
   onManage,
   onPrint,
+  onTogglePrintLine,
   rows,
-  selectedCode
+  selectedCode,
+  selectedPrintLines
 }: {
   currentDisplay: CustomerRequirement | null;
   formatDate: (value: string | null) => string;
@@ -299,9 +320,13 @@ function DisplayRequirementView({
   onDisplay: (row: CustomerRequirement) => void;
   onManage: (row: CustomerRequirement) => void;
   onPrint: (row?: CustomerRequirement | null) => void;
+  onTogglePrintLine: (lineIndex: number) => void;
   rows: CustomerRequirement[];
   selectedCode: string | null;
+  selectedPrintLines: Set<number>;
 }) {
+  const hasPrintSelection = selectedPrintLines.size > 0;
+
   return (
     <section className="display-layout">
       <section className="table-panel display-table-panel">
@@ -384,11 +409,22 @@ function DisplayRequirementView({
         </div>
         <div className="sap-grid">
           <div className="sap-grid-head">
+            <span className="print-check-header" aria-hidden="true" />
             <span>Text</span>
           </div>
           {lines.length > 0 ? (
             lines.map((line, index) => (
-              <div className="sap-grid-row" key={`${line}-${index}`}>
+              <div
+                className={hasPrintSelection && !selectedPrintLines.has(index) ? "sap-grid-row print-excluded" : "sap-grid-row"}
+                key={`${line}-${index}`}
+              >
+                <label className="line-print-check" aria-label={`Print line ${index + 1}`}>
+                  <input
+                    type="checkbox"
+                    checked={selectedPrintLines.has(index)}
+                    onChange={() => onTogglePrintLine(index)}
+                  />
+                </label>
                 <p>{line}</p>
               </div>
             ))
