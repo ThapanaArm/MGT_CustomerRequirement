@@ -1,29 +1,15 @@
 import {
-  ClipboardCheck,
-  FileText,
-  Filter,
-  HelpCircle,
-  IdCard,
-  Info,
-  LayoutList,
   Edit3,
   List,
-  Mail,
-  MapPin,
   Monitor,
   MoreHorizontal,
-  Package,
-  PlayCircle,
   Plus,
   Power,
   Printer,
   RefreshCw,
   Save,
   Search,
-  ShoppingCart,
   Trash2,
-  UserPlus,
-  Users,
   X
 } from "lucide-react";
 import { FormEvent, useCallback, useEffect, useMemo, useState, useTransition } from "react";
@@ -225,116 +211,7 @@ export default function App() {
         </div>
       </header>
 
-      <section className="ribbon-shell" aria-label="Application commands">
-        <div className="ribbon-tabs">
-          <button type="button">HOME</button>
-          <button className="active" type="button">VIEW</button>
-        </div>
-
-        <div className="ribbon-toolbar">
-          <div className="ribbon-group">
-            <button className="ribbon-button" type="button" onClick={openCreate}>
-              <UserPlus size={24} aria-hidden="true" />
-              <span>Add Requirement</span>
-            </button>
-            <button className="ribbon-button" type="button">
-              <Users size={24} aria-hidden="true" />
-              <span>Customer Group</span>
-            </button>
-            <button className="ribbon-button" type="button">
-              <Package size={24} aria-hidden="true" />
-              <span>New Items</span>
-            </button>
-            <small>New</small>
-          </div>
-
-          <div className="ribbon-group">
-            <button className="ribbon-button danger" type="button" onClick={() => currentDisplay ? removeRow(currentDisplay) : undefined} disabled={!currentDisplay}>
-              <Trash2 size={24} aria-hidden="true" />
-              <span>Delete</span>
-            </button>
-            <button className="ribbon-button" type="button" onClick={() => currentDisplay ? openManage(currentDisplay) : undefined} disabled={!currentDisplay}>
-              <Edit3 size={24} aria-hidden="true" />
-              <span>Edit</span>
-            </button>
-            <button className="ribbon-button" type="button" onClick={() => printDocument(currentDisplay)} disabled={!currentDisplay}>
-              <Printer size={24} aria-hidden="true" />
-              <span>Print</span>
-            </button>
-            <small>Actions</small>
-          </div>
-
-          <div className="ribbon-group quick-letter">
-            <button type="button"><Mail size={15} aria-hidden="true" />Thank You Note</button>
-            <button type="button"><ClipboardCheck size={15} aria-hidden="true" />Service Excellence</button>
-            <button type="button"><FileText size={15} aria-hidden="true" />Welcome To MGT</button>
-            <small>Quick Letter</small>
-          </div>
-
-          <div className="ribbon-group">
-            <button className="ribbon-button selected" type="button">
-              <LayoutList size={24} aria-hidden="true" />
-              <span>List</span>
-            </button>
-            <button className="ribbon-button" type="button">
-              <IdCard size={24} aria-hidden="true" />
-              <span>Card</span>
-            </button>
-            <button className="ribbon-button" type="button">
-              <MapPin size={24} aria-hidden="true" />
-              <span>Map It</span>
-            </button>
-            <small>View</small>
-          </div>
-
-          <div className="ribbon-group">
-            <button className="ribbon-button" type="button">
-              <Filter size={24} aria-hidden="true" />
-              <span>Filter</span>
-            </button>
-            <button className="ribbon-button" type="button">
-              <PlayCircle size={24} aria-hidden="true" />
-              <span>Getting Started</span>
-            </button>
-            <button className="ribbon-button" type="button">
-              <HelpCircle size={24} aria-hidden="true" />
-              <span>Support</span>
-            </button>
-            <button className="ribbon-button" type="button">
-              <ShoppingCart size={24} aria-hidden="true" />
-              <span>Buy Now</span>
-            </button>
-            <button className="ribbon-button" type="button">
-              <Info size={24} aria-hidden="true" />
-              <span>About</span>
-            </button>
-            <small>DevExpress</small>
-          </div>
-        </div>
-      </section>
-
       <section className="workspace" id="requirements">
-        <aside className="filter-pane" aria-label="Customer filters">
-          <div className="filter-title">Customer Requirements</div>
-          <div className="filter-section">
-            <strong>Favorites</strong>
-            <button className={status === "all" ? "active" : ""} type="button" onClick={() => setStatus("all")}>
-              All ({total})
-            </button>
-            <button className={status === "active" ? "active" : ""} type="button" onClick={() => setStatus("active")}>
-              Active ({activeCount})
-            </button>
-            <button className={status === "inactive" ? "active" : ""} type="button" onClick={() => setStatus("inactive")}>
-              Inactive ({inactiveCount})
-            </button>
-          </div>
-          <div className="filter-section">
-            <strong>Custom Filters</strong>
-            <span>On update ({rows.filter((row) => row.updatedAt).length})</span>
-            <span>Groups</span>
-          </div>
-        </aside>
-
         <section className="content-area">
           <header className="top-bar">
             <div>
